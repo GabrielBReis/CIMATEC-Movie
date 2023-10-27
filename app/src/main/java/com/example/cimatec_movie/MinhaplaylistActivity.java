@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MinhaplaylistActivity extends AppCompatActivity {
     private ListView lstMP;
-    private List<filme> filmesList = new ArrayList<>();
+    private List<filme> filmesList1 = new ArrayList<>();
     private Button btnAdicionarFilme, btnTodasPL;
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -32,31 +32,36 @@ public class MinhaplaylistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_minhaplaylist);
 
-        String RA = getIntent().getStringExtra("RA-Usuario").toString();
+        String RA = getIntent().getStringExtra("RA-Usuario");
+        Log.d("FirebaseData", "RA-Usuario: " + RA);
+
         lstMP = findViewById(R.id.lstMP);
 
         btnAdicionarFilme = findViewById(R.id.btnAdicionarFilme);
         btnTodasPL = findViewById(R.id.btnTodasPL);
 
-        DatabaseReference MinhaPlaylist = databaseReference.child("playlist").child(RA);
+        DatabaseReference MinhaPlaylist = FirebaseDatabase.getInstance().getReference().child("playlist").child(RA);
 
         MinhaPlaylist.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                filmesList.clear();
+                filmesList1.clear();
                 for (DataSnapshot filmeSnapshot : dataSnapshot.getChildren()) {
                     filme filme = filmeSnapshot.getValue(filme.class);
-                    filmesList.add(filme);
+                    filmesList1.add(filme);
                     Log.d("FirebaseData", "Nome: " + filme.getNome() + ", Ano: " + filme.getAno() + ", Curtida: " + filme.getCurtida());
-
                 }
                 updateList();
+                Log.d("FirebaseData", "MinhaPlaylist Reference: " + MinhaPlaylist.toString());
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Trate erros, se necessário.
             }
+
+
         });
 
         btnAdicionarFilme.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +83,8 @@ public class MinhaplaylistActivity extends AppCompatActivity {
     }
 
     private void updateList() {
-        ArrayAdapter<filme> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, filmesList);
+        ArrayAdapter<filme> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, filmesList1);
         lstMP.setAdapter(adapter);
+
     }
 }
