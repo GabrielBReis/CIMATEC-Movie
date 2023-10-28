@@ -57,12 +57,10 @@ public class DetalhesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (filme != null) {
-                    int like = filme.getCurtida() + 1;
-                    DetalhesFilme.child("curtida").setValue(like);
-                    txtCurtida.setText(like);
-//                    Intent intent = new Intent(getApplicationContext(), FilmesActivity.class);
-//                    intent.putExtra("RA-Filme", RA_filme);
-//                    startActivity(intent);
+                    int curtida = filme.getCurtida();
+                    curtida +=1;
+                    DetalhesFilme.child("curtida").setValue(curtida);
+                    txtCurtida.setText(curtida);
                 }
             }
         });
