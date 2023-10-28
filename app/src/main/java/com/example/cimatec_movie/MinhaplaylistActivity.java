@@ -36,7 +36,6 @@ public class MinhaplaylistActivity extends AppCompatActivity {
         Log.d("FirebaseData", "RA-Usuario: " + RA);
 
         lstMP = findViewById(R.id.lstMP);
-
         btnAdicionarFilme = findViewById(R.id.btnAdicionarFilme);
         btnTodasPL = findViewById(R.id.btnTodasPL);
 
@@ -49,19 +48,16 @@ public class MinhaplaylistActivity extends AppCompatActivity {
                 for (DataSnapshot filmeSnapshot : dataSnapshot.getChildren()) {
                     filme filme = filmeSnapshot.getValue(filme.class);
                     filmesList1.add(filme);
-                    Log.d("FirebaseData", "Nome: " + filme.getNome() + ", Ano: " + filme.getAno() + ", Curtida: " + filme.getCurtida());
+                    Log.d("FirebaseData", "\nNome: " + filme.getNome() + ",\n Ano: " + filme.getAno() + ",\n Curtida: " + filme.getCurtida());
                 }
                 updateList();
                 Log.d("FirebaseData", "MinhaPlaylist Reference: " + MinhaPlaylist.toString());
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Trate erros, se necessário.
             }
-
-
         });
 
         btnAdicionarFilme.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +73,7 @@ public class MinhaplaylistActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PlaylistsActivity.class);
+                intent.putExtra("MinhaPlaylist", RA);
                 startActivity(intent);
             }
         });

@@ -10,11 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class CadastrofilmesActivity extends AppCompatActivity {
-
     private Button btnAdicionar, btnVoltarMP;
     private EditText edtNome, edtAno;
     private DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -23,6 +24,7 @@ public class CadastrofilmesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_cadastrofilmes);
         String RA = getIntent().getStringExtra("RA-Usuario");
 
@@ -46,24 +48,26 @@ public class CadastrofilmesActivity extends AppCompatActivity {
                 String ano = edtAno.getText().toString().trim();
 
                 if (!nome.isEmpty() && !ano.isEmpty()) {
-                    // Aqui você pode adicionar lógica para obter a "matricula" ou outra chave relevante
-                    // para onde você deseja salvar o filme.
+                    DatabaseReference filmes = reference.child("playlist");
 
-                    // Crie um objeto "filme" com os dados inseridos pelo usuário
-                    filme novoFilme = new filme();
-                    novoFilme.setNome(nome);
-                    novoFilme.setAno(Integer.parseInt(ano));
-                    novoFilme.setCurtida(0);
+                    filmes.child(RA).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            filme novoFilme = new filme();
+                            novoFilme.setNome(nome);
+                            novoFilme.setAno(Integer.parseInt(ano));
+                            novoFilme.setCurtida(0);
 
-                    // Use a referência do Firebase para salvar o novo filme
-                    DatabaseReference filmesReference = reference.child("playlist").child(RA);
-                    String novaChave = filmesReference.push().getKey();
-                    filmesReference.child(novaChave).setValue(novoFilme);
-
-                    // Exiba uma mensagem de sucesso
+                            long numFilmes = dataSnapshot.getChildrenCount();
+                            String nomeFilme = "filme" + (numFilmes + 1);
+                            //DatabaseReference filmesReference = reference.child("playlist").child(RA);
+                            //String novaChave = filmesReference.push().getKey();
+                            //filmesReference.child(novaChave).setValue(novoFilme);
+                            filmes.child(RA).child(nomeFilme).setValue(novoFilme);
+                        }
+                    });
                     Toast.makeText(CadastrofilmesActivity.this, "Filme adicionado com sucesso!", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Caso os campos estejam vazios, você pode tratar isso de acordo com sua lógica.
                     Toast.makeText(CadastrofilmesActivity.this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
                 }
             }

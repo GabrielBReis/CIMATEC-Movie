@@ -11,8 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
+        android:layout_marginBottom="34dp"
         android:text="Filmes"
         android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/lstFilmes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,24 +23,14 @@
         android:id="@+id/lstFilmes"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="53dp"
+        android:layout_marginStart="52dp"
         android:layout_marginTop="120dp"
-        android:layout_marginEnd="53dp"
-        android:layout_marginBottom="120dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button2"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="72dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnVPlaylist"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="40dp"
-        android:text="Curtir"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btnVPlaylist"
@@ -48,5 +40,6 @@
         android:layout_marginBottom="40dp"
         android:text="voltar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lstFilmes" />
 </androidx.constraintlayout.widget.ConstraintLayout>

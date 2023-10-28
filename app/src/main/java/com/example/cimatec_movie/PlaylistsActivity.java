@@ -31,26 +31,29 @@ public class PlaylistsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlists);
+
         btnVoltar = findViewById(R.id.btnVoltar);
         lstview = findViewById(R.id.lstPlaylists);
         usuarios = new ArrayList<>();
+
+        DatabaseReference playlist = reference.child("playlist");
+        String MinhaPlaylist = getIntent().getStringExtra("RA-Usuario");
 
         btnVoltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MinhaplaylistActivity.class);
+                intent.putExtra("MinhaPlaylist", MinhaPlaylist);
                 startActivity(intent);
             }
         });
-
-        DatabaseReference playlist = reference.child("playlist");
 
         playlist.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot playlistnapshot : dataSnapshot.getChildren()) {
-                    String matricula = playlistnapshot.getKey();
-                    usuarios.add(matricula);
+                    String RA = playlistnapshot.getKey();
+                    usuarios.add(RA);
                 }
                 updateList();
             }
@@ -64,13 +67,14 @@ public class PlaylistsActivity extends AppCompatActivity {
     public void updateList() {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, usuarios);
         lstview.setAdapter(adapter);
-
+        String MinhaPlaylist = getIntent().getStringExtra("RA-Usuario");
         lstview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String matricula = usuarios.get(position);
+                String RA = usuarios.get(position);
                 Intent intent = new Intent(PlaylistsActivity.this, FilmesActivity.class);
-                intent.putExtra("matricula", matricula);
+                intent.putExtra("RA-Playlist", RA);
+                intent.putExtra("RA-Usuario", MinhaPlaylist);
                 startActivity(intent);
             }
         });
